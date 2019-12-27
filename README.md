@@ -12,9 +12,9 @@ Author  Pablo Perez Garcia
 
 Need to install [Elixir](https://elixir-lang.org) and [Erlang](https://www.erlang.org).
 
-[Here](https://elixir-lang.org/install.html#distributions) you have documentation depending of your OS.
+[Here](https://elixir-lang.org/install.html#distributions) you have documentation of how to installed depending of your OS.
 
-Once you have installed, you just need to use or the terminal using **iex** or **elixir* pointing to the ex file
+Once you have installed, you just need to use or the terminal using **iex** or **elixir** pointing to the ex file
 
 ```
 elixir functions.ex
