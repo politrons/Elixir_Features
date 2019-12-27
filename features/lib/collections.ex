@@ -1,8 +1,9 @@
 defmodule Collections do
   @moduledoc false
 
-  # List
-  # ----
+  #----------#
+  #   List   #
+  #----------#
 
   #  In Elixir just like in other dynamic language allow you to add different types in one collection.
   my_collection = ["un", 2, "tres", 4.0, :cinco]
@@ -22,7 +23,8 @@ defmodule Collections do
 
   def for_each([]), do: nil
 
-  # Sugar iteration:
+  # Sugar iteration
+  # ----------------
   # Second option is less verbose and more sugar using [Enum.each] function that allow pass an array
   # and he iterate a consumer function.
 
@@ -30,8 +32,19 @@ defmodule Collections do
     IO.inspect element
   end
 
-  # Map
-  # ----
+  #  Filter list
+  # -------------
+  # for iterator allow pass a function as second argument, to filter the list before apply the transform function,
+  # in the third argument it will return a new list.
+  my_array = ["hello", "Elixir", 5, "functional", :another, "world"]
+  is_alphanumeric? = fn (n) -> is_binary(n) end
+  filter_list = for n <- my_array, is_alphanumeric?.(n), do: String.upcase(n)
+
+  IO.inspect filter_list
+
+  #----------#
+  #    Map   #
+  #----------#
 
   # Maps in Elixir are created using %{key => value} and allow N entry arguments or 0 %{}
   my_map = %{
