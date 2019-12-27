@@ -15,8 +15,8 @@ defmodule Basics do
 
   IO.puts "How many characters " <> to_string(String.length("How many characters I have?"))
 
-  #   Types
-  # ---------
+  # Primitive Types
+  # -----------------
   # Variable assigned is just like in any other dynamic type language, you can asign whatever value, and
   # then automatically the variable is created for that type.
   # Since Elixir is not String type, compiler cannot help us here, and combine different types is possible, bringing
@@ -26,9 +26,8 @@ defmodule Basics do
   float = 1.0
   string = "hello variable"
   array = ["hello", 1, "world", 5.0]
-  :apple
+  :applee
   :bannana
-  tuples = {"hello", :tuple, "world"}
 
   IO.puts to_string(integer) <> " is integer:" <> to_string(is_integer(integer))
   IO.puts to_string(float) <> " is float:" <> to_string(is_float(float))
@@ -36,7 +35,17 @@ defmodule Basics do
   IO.inspect array
   IO.inspect :apple
   IO.inspect :bannana
-  IO.inspect tuples
-  IO.inspect tuples |> elem(2) # Using [elem(position)] we can extract elements from a tuple
 
+  #   Tuples
+  # ---------
+  tuples = {"hello", :tuple, "world"}
+
+  IO.inspect tuples
+  IO.inspect tuples
+             |> elem(2) # Using [elem(position)] we can extract elements from a tuple
+
+  {first, second, third} = tuples
+  IO.inspect first
+  IO.inspect second
+  IO.inspect third
 end
