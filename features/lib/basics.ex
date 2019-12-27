@@ -25,12 +25,14 @@ defmodule Basics do
   integer = 1
   float = 1.0
   string = "hello variable"
+  array = ["hello", 1, "world", 5.0]
   :apple
   :bannana
 
   IO.puts to_string(integer) <> " is integer:" <> to_string(is_integer(integer))
   IO.puts to_string(float) <> " is float:" <> to_string(is_float(float))
   IO.puts string <> " is string:" <> to_string(is_binary(string))
+  IO.inspect array
   IO.puts to_string(:apple)
   IO.puts to_string(:bannana)
 
