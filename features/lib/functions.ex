@@ -28,7 +28,6 @@ defmodule Functions do
     "after sum " <> to_string(a + b) <> " number"
   end
 
-
   #  Higher order functions
   #  -----------------------
   #  All functions in elixir are first class citizen so it can receive and return new functions
@@ -70,14 +69,13 @@ defmodule Functions do
   #  a function that expect to receive a string to concat with the number, once we transform into string
 
   function_receive_and_return_function = fn sum_function ->
-    to_string_currying_function = fn sum_value -> fn concat_value -> to_string(sum_value) <> concat_value end end
-    to_string_currying_function.(sum_function.(10, 5))
+    to_string_function = fn sum_value -> fn concat_value -> to_string(sum_value) <> concat_value end end
+    to_string_function.(sum_function.(10, 5))
   end
 
   currying_function = function_receive_and_return_function.(fn (a, b) -> a + b end)
 
   IO.inspect currying_function
-
   IO.inspect currying_function.(" Numbers")
 
 end

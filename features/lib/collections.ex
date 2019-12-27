@@ -53,7 +53,11 @@ defmodule Collections do
   # -----------
   #Just like in Haskell or Scala foldLeft or foldRight allow iterate from left to right, into a type specify as second
   # argument, and as third, we pass function where every iteration, is the previous element added into the type.
-  new_concat_string = List.foldr(["fold", "always", "is", "cool"], "", fn old, new -> String.upcase(old <> " " <> new) end)
+  new_concat_string = List.foldr(
+    ["fold", "always", "is", "cool"],
+    "",
+    fn old, new -> String.upcase(old <> " " <> new) end
+  )
   IO.inspect new_concat_string
 
   # Here we iterate the list and we pass every element in upper case in the new type array.
@@ -100,6 +104,42 @@ defmodule Collections do
   # To drop elements and creating new maps we use Map.delete
   new_map = Map.delete(my_map, 1)
   IO.inspect new_map
+
+  #------------#
+  #   Range    #
+  #------------#
+
+  range = 1..100
+
+  # Get first and last element
+  first..last = range
+  IO.inspect first
+  IO.inspect last
+
+  # Integration with Enum module
+
+  # Count number of elements
+  IO.inspect Enum.count(range)
+
+  #------------#
+  #   Stream   #
+  #------------#
+
+  #Stream monad is not different compare with Java or Scala streams, same operators and same concept to filter,
+  # transform and compose elements.
+  range = 1..10
+
+  # With [map] operator we can transform elements of the stream
+  double_stream = Stream.map(range, fn element -> element * 2 end)
+  IO.inspect Enum.to_list(double_stream)
+
+  # With [flat_map] operator we can compose elements of the stream into new element type
+  flat_map_stream = Stream.flat_map(range, fn element -> [element * 2] end)
+  IO.inspect Enum.to_list(flat_map_stream)
+
+  # With filter operator we can filter the elements of the stream
+  filter_stream = Stream.filter(range, fn number -> number > 5 end)
+  IO.inspect Enum.to_list(filter_stream)
 
 end
 
