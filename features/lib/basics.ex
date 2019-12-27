@@ -48,4 +48,7 @@ defmodule Basics do
   IO.inspect first
   IO.inspect second
   IO.inspect third
+
+  # Update element in tuple
+  IO.inspect put_elem(tuples, 2, "tuple")
 end
