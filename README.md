@@ -1,12 +1,14 @@
-# Elixir features
+Author  Pablo Perez Garcia
 
-## Features
+# ![My image](img/elixir.png)
+
+### Features
 
 * **[Types](features/lib/basics.ex)**
 * **[Collections](features/lib/collections.ex)**
 * **[Functions](features/lib/functions.ex)**
 
-## Use it
+### How to use it
 
 Need to install [Elixir](https://elixir-lang.org) and [Erlang](https://www.erlang.org).
 
