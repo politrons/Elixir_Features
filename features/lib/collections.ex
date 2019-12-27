@@ -12,7 +12,8 @@ defmodule Collections do
   concat_list = [1, 2, 3, 4] ++ [5, 6, 7, 8, 9, 10]
   IO.inspect concat_list
 
-  # Recursion:
+  # Recursion iteration
+  # -------------------
   # Just like in Haskell the most common way to iterate an array is using recursion, here we define the function
   # where we get every element of the array defining the element and the rest of the collection, without that element extracted,
   # and then we need to also define another function when the array is empty and then we wont nothing.
@@ -39,8 +40,25 @@ defmodule Collections do
   my_array = ["hello", "Elixir", 5, "functional", :another, "world"]
   is_alphanumeric? = fn (n) -> is_binary(n) end
   filter_list = for n <- my_array, is_alphanumeric?.(n), do: String.upcase(n)
-
   IO.inspect filter_list
+
+  # Using [List.last] operator passing an array we extract the last element of the array, also works with [first]
+  get_last_element = List.last(my_array)
+  IO.inspect get_last_element
+
+  get_first_element = List.first(my_array)
+  IO.inspect get_first_element
+
+  #  Fold list
+  # -----------
+  #Just like in Haskell or Scala foldLeft or foldRight allow iterate from left to right, into a type specify as second
+  # argument, and as third, we pass function where every iteration, is the previous element added into the type.
+  new_concat_string = List.foldr(["fold", "always", "is", "cool"], "", fn old, new -> String.upcase(old <> " " <> new) end)
+  IO.inspect new_concat_string
+
+  # Here we iterate the list and we pass every element in upper case in the new type array.
+  new_upper_list = List.foldl(["fold", "always", "is", "cool"], [], fn new, old -> old ++ [String.upcase(new)] end)
+  IO.inspect new_upper_list
 
   #----------#
   #    Map   #
