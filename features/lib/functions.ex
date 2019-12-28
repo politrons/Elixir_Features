@@ -78,6 +78,10 @@ defmodule Functions do
   IO.inspect currying_function
   IO.inspect currying_function.(" Numbers")
 
+  # Here we have a function that return a function which return another function.
+  currying_function = fn a -> fn b -> fn () -> String.upcase(a <> " currying function " <> b) end end end
+  IO.inspect currying_function.("hello").("world").()
+
 end
 
 defmodule FunctionsRunner do
