@@ -3,7 +3,6 @@ defmodule PatternMatching do
 
   # Basic match
   #------------
-
   # Pattern matching in Elixir use the syntax [case variable do] and after all values to match the value in any case
   # followed by lambdas to run a logic.
   int_val = 10
@@ -26,7 +25,6 @@ defmodule PatternMatching do
   end
   IO.inspect output_type
 
-
   # Functions
   #-----------
   #This is really awesome, how we can use pattern matching with functions to do several things depending of the types of arguments.
@@ -38,7 +36,6 @@ defmodule PatternMatching do
     :patata -> "Patatas with one beer please"
     _ -> "This function is not well defined"
   end
-
   IO.inspect function_pattern_matching.(1)
   IO.inspect function_pattern_matching.("hello functional pattern matching")
   IO.inspect function_pattern_matching.(fn x -> String.upcase(x) end)
@@ -59,12 +56,10 @@ defmodule PatternMatching do
                                  true -> "Nothing match the condition"
                                end
   end
-
   IO.inspect condition_response.(1)
   IO.inspect condition_response.("hello condition")
   IO.inspect condition_response.(:patata)
   IO.inspect condition_response.(:wtf)
-
 
   # If/Do/End
   #-----------
@@ -75,7 +70,6 @@ defmodule PatternMatching do
   else
     "old fashion Else"
   end
-
   IO.inspect return_value
 
 end
