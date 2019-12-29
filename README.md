@@ -8,6 +8,7 @@ Author  Pablo Perez Garcia
 * **[Collections](features/lib/collections.ex)**
 * **[Functions](features/lib/functions.ex)**
 * **[Pattern Matching](features/lib/pattern_matching.ex)**
+* **[Async](features/lib/async.ex)**
 
 ### How to use it
 
