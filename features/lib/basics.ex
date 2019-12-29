@@ -1,3 +1,6 @@
+
+#  In Elixir as a functional language it does not contain any class/instance, everything is stateless and static.
+#  You can consider the closest thing as a class a module as we have here, which is basically a collection of functions.
 defmodule Basics do
   @moduledoc false
 
@@ -13,7 +16,8 @@ defmodule Basics do
   #  Factory class [String] provide the typical operators to work with Strings
   IO.puts String.upcase("hello string in upper case")
 
-  IO.puts "How many characters " <> to_string(String.length("How many characters I have?"))
+  # We can also use #{} to use interpolations like in Scala, and add some functions to be used inside string
+  IO.puts "How many characters #{String.length("How many characters I have?")}"
 
   # Primitive Types
   # -----------------
