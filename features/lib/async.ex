@@ -8,8 +8,7 @@ defmodule Async do
 
   #  Async
   # -------
-  # Basic async  Task is a function with no arguments.
-  # To move the thread local result into the main one, we use [Task.await]. The await it has a default timeout of 5 seconds.
+  # Basic async  Task contains a function with no arguments.
   task = Task.async(
     fn ->
       :timer.sleep(1000)
@@ -18,6 +17,7 @@ defmodule Async do
   )
 
   sync_response = fn input -> String.upcase(input) <> "!!!" end.("Hello Sync world")
+  # To move the thread local result into the main one, we use [Task.await]. The await it has a default timeout of 5 seconds.
   async_response = Task.await(task)
 
   IO.inspect sync_response
