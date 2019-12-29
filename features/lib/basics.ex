@@ -1,3 +1,8 @@
+# Modules are the closest thing we have in Functional language as Elixir or Haskell to classes.
+# Here we define a data type structure with some default values, and now is possible to access from everywhere
+defmodule User do
+  defstruct name: "", age: 0
+end
 
 #  In Elixir as a functional language it does not contain any class/instance, everything is stateless and static.
 #  You can consider the closest thing as a class a module as we have here, which is basically a collection of functions.
@@ -30,7 +35,7 @@ defmodule Basics do
   float = 1.0
   string = "hello variable"
   array = ["hello", 1, "world", 5.0]
-  :applee
+  :applee # Atoms are constant types whose name is also his value. Start with [:] and the value is what follow the :
   :bannana
 
   IO.puts to_string(integer) <> " is integer:" <> to_string(is_integer(integer))
@@ -55,4 +60,15 @@ defmodule Basics do
 
   # Update element in tuple
   IO.inspect put_elem(tuples, 2, "tuple")
+
+  #  Structs types
+  # ---------------
+  # Structs type use the module data type created previously in the top of this module.
+
+  user = %User{name: "politrons", age: 38}
+
+  IO.inspect "Name: #{user.name}"
+  IO.inspect "Age: #{user.age}"
+
 end
+
