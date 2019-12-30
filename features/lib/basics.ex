@@ -70,5 +70,22 @@ defmodule Basics do
   IO.inspect "Name: #{user.name}"
   IO.inspect "Age: #{user.age}"
 
+  # Agents
+  # ------------
+  #Agents are a simple abstraction around state.
+  #Often in Elixir there is a need to share or store state
+
+  # Here we create the agent with a initial function that set the state.
+  {:ok, pid} = Agent.start_link(fn -> 5  end)
+  # Then we can use functions like [get_and_update] passing the processId to update the state of the agent,
+  # passing a new function where the function argument is the current state of the [Agent]
+  fun = fn -> Agent.get_and_update(pid, fn current_state -> {current_state, current_state - 1} end) end
+
+  IO.inspect fun.()
+  IO.inspect fun.()
+  IO.inspect fun.()
+  IO.inspect fun.()
+  IO.inspect fun.()
+
 end
 
