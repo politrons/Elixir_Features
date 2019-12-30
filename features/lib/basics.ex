@@ -75,17 +75,26 @@ defmodule Basics do
   #Agents are a simple abstraction around state.
   #Often in Elixir there is a need to share or store state
 
-  # Here we create the agent with a initial function that set the state.
-  {:ok, pid} = Agent.start_link(fn -> 5  end)
-  # Then we can use functions like [get_and_update] passing the processId to update the state of the agent,
-  # passing a new function where the function argument is the current state of the [Agent]
-  fun = fn -> Agent.get_and_update(pid, fn current_state -> {current_state, current_state - 1} end) end
+  # For this example and in order to reduce the agent value in a loop, we use recursion functions
+  def reduce_and_print(x, pid) when x > 0 do
+    # Then we can use functions like [get_and_update] passing the processId to update the state of the agent,
+    # passing a new function where the function argument is the current state of the [Agent]
+    fun = fn -> Agent.get_and_update(pid, fn current_state -> {current_state, current_state - 1} end) end
+    value = fun.()
+    IO.inspect value
+    reduce_and_print(value, pid)
+  end
 
-  IO.inspect fun.()
-  IO.inspect fun.()
-  IO.inspect fun.()
-  IO.inspect fun.()
-  IO.inspect fun.()
+  # Like in Haskell is very common create the output function to be matched by the invocation, once the value is 0
+  def reduce_and_print(0, _) do
+    nil end
+
 
 end
 
+defmodule AgentRunner do
+  # Here we create the agent with a initial function that set the state.
+  {:ok, pid} = Agent.start_link(fn -> 5  end)
+  Basics.reduce_and_print(1000, pid)
+
+end
