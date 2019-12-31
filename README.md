@@ -9,6 +9,7 @@ Author  Pablo Perez Garcia
 * **[Functions](features/lib/functions.ex)**
 * **[Pattern Matching](features/lib/pattern_matching.ex)**
 * **[Async](features/lib/async.ex)**
+* **[Processes](features/lib/actors.ex)**
 
 ### How to use it
 

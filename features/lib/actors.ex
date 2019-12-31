@@ -1,4 +1,4 @@
-# In Erlang/Elixir the Akka actor, is known as process, and works pretty much the same.
+# In Erlang/Elixir the Akka actor, is known as processes, and works pretty much the same.
 # Stateless entity that not share state and communicate between each other by message
 defmodule Actors do
   @moduledoc false
@@ -64,6 +64,8 @@ defmodule Actors do
   # Once the counter reach 0 we stop communications.
   # If you want to see more information about [Agent] go to basics.ex file to see some examples.
   {:ok, agent_pid} = Agent.start_link(fn -> 10  end)
+  # In order to create a reference of the process or [pid] we use [spawn] function passing the module, function and
+  # number of arguments of that process.
   pid_process1 = spawn(Actors.Process2, :listener, [])
   send pid_process1, {:init, agent_pid}
 
