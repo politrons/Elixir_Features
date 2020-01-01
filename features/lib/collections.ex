@@ -108,7 +108,6 @@ defmodule Collections do
   #------------#
   #   Range    #
   #------------#
-
   range = 1..100
 
   # Get first and last element
