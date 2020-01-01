@@ -28,7 +28,6 @@ defmodule PatternMatching do
   # Functions
   #-----------
   #This is really awesome, how we can use pattern matching with functions to do several things depending of the types of arguments.
-
   function_pattern_matching = fn
     x when is_integer(x) -> x * 1000
     x when is_binary(x) -> String.upcase(x)
