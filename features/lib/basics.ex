@@ -89,7 +89,6 @@ defmodule Basics do
   def reduce_and_print(0, _) do
     nil end
 
-
 end
 
 defmodule AgentRunner do
