@@ -95,5 +95,4 @@ defmodule AgentRunner do
   # Here we create the agent with a initial function that set the state.
   {:ok, pid} = Agent.start_link(fn -> 5  end)
   Basics.reduce_and_print(1000, pid)
-
 end
