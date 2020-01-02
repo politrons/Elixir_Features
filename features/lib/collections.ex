@@ -146,5 +146,4 @@ end
 defmodule CollectionsMain do
   @moduledoc false
   Collections.for_each([1, "hello", 2.0, :pablo])
-
 end
