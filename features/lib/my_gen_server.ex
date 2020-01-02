@@ -1,6 +1,7 @@
 defmodule MyGenServer do
   @moduledoc false
 
+  #In order to create your own GenServer, you need to use GenServer in your own implementation
   use GenServer
 
   #Function to be invoked once the GenServer is initialized
@@ -10,11 +11,18 @@ defmodule MyGenServer do
     {:ok, basket}
   end
 
+  # All [handle_call] functions are Synchronous from the client side.
   # [handle_call] implementation, specifying the message that we match for this function, once we receive it.
   # Synchronous call to get an element from this process. It will block the client until the message is received
   @impl true
   def handle_call(:basket, _from, basket) do
     {:reply, basket, basket}
+  end
+
+  @impl true
+  def handle_call(:total_price, _from, basket) do
+    total_price = List.foldr(basket, 0, fn (product, total_price) -> total_price + product.price end)
+    {:reply,total_price, basket}
   end
 
   # [handle_cast] implementation. Asynchronous fire and forget call, the client send the message to the process, and don't wait for any response.
@@ -46,9 +54,10 @@ defmodule MyGenServerRunner do
   IO.inspect GenServer.call(Basket, :basket)
   GenServer.cast(Basket, {:add_product, %Product{id: "1", description: "coca-cola", price: 2.0}})
   GenServer.cast(Basket, {:add_product, %Product{id: "2", description: "pepsi", price: 2.0}})
-  IO.inspect GenServer.call(Basket, :basket)
+  IO.inspect GenServer.call(Basket, :basket), label: "Basket"
+  IO.inspect "Total price: #{GenServer.call(Basket, :total_price)}"
   GenServer.cast(Basket, {:delete_product, "2"})
-  IO.inspect GenServer.call(Basket, :basket)
-
+  IO.inspect GenServer.call(Basket, :basket), label: "Basket"
+  IO.inspect "Total price: #{GenServer.call(Basket, :total_price)}"
 
 end
