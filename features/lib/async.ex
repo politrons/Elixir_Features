@@ -93,7 +93,6 @@ end
 defmodule AsyncRunner do
 
   pid = spawn(Async, :simple_process, ["Hello", "async", "world"])
-
   IO.inspect pid
 
 end
