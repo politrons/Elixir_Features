@@ -10,6 +10,7 @@ Author  Pablo Perez Garcia
 * **[Pattern Matching](features/lib/pattern_matching.ex)**
 * **[Async](features/lib/async.ex)**
 * **[Processes](features/lib/actors.ex)**
+* **[GenServer](features/lib/my_gen_server.ex)**
 
 ### How to use it
 
