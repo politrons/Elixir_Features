@@ -85,7 +85,6 @@ defmodule Functions do
 end
 
 defmodule FunctionsRunner do
-  @moduledoc false
 
   IO.inspect Functions.my_named_function(5, 5)
 
