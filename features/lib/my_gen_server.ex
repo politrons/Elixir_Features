@@ -4,6 +4,10 @@ defmodule MyGenServer do
   #In order to create your own GenServer, you need to use GenServer in your own implementation
   use GenServer
 
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
   #Function to be invoked once the GenServer is initialized
   @impl true
   def init(basket) do
@@ -22,7 +26,7 @@ defmodule MyGenServer do
   @impl true
   def handle_call(:total_price, _from, basket) do
     total_price = List.foldr(basket, 0, fn (product, total_price) -> total_price + product.price end)
-    {:reply,total_price, basket}
+    {:reply, total_price, basket}
   end
 
   # [handle_cast] implementation. Asynchronous fire and forget call, the client send the message to the process, and don't wait for any response.
@@ -60,4 +64,19 @@ defmodule MyGenServerRunner do
   IO.inspect GenServer.call(Basket, :basket), label: "Basket"
   IO.inspect "Total price: #{GenServer.call(Basket, :total_price)}"
 
+  # Supervisor
+  # --------------
+
+  children = [
+    %{
+      id: MyGenServer,
+      start: {MyGenServer, :start_link, [[]]}
+    }
+  ]
+
+  {:ok,_} = Supervisor.start_link(children,  strategy: :one_for_one)
+
+  GenServer.cast(MyGenServer, {:add_product, %Product{id: "1", description: "nachos", price: 3.0}})
+  IO.inspect GenServer.call(MyGenServer, :basket), label: "Basket"
+  IO.inspect "Total price: #{GenServer.call(MyGenServer, :total_price)}"
 end
