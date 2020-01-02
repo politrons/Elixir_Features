@@ -10,7 +10,6 @@ defmodule MyGenServer do
     {:ok, basket}
   end
 
-
   # [handle_call] implementation, specifying the message that we match for this function, once we receive it.
   # Synchronous call to get an element from this process. It will block the client until the message is received
   @impl true
