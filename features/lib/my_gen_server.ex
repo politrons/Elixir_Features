@@ -55,6 +55,8 @@ defmodule MyGenServerRunner do
   {:ok, _} = GenServer.start_link(MyGenServer, [], name: Basket)
   # {:ok, pid} = GenServer.start_link(MyGenServer, ["hello_gen_server"])
 
+  # Inovcation of the API, we use [GenServer.call] passing the GenServer Module and method to match in the patter matching for Synchronous calls.
+  # And [GenServer.cast] for fire & forget calls.
   IO.inspect GenServer.call(Basket, :basket)
   GenServer.cast(Basket, {:add_product, %Product{id: "1", description: "coca-cola", price: 2.0}})
   GenServer.cast(Basket, {:add_product, %Product{id: "2", description: "pepsi", price: 2.0}})
