@@ -4,7 +4,7 @@ defmodule MyGenServer do
   #In order to create your own GenServer, you need to use GenServer in your own implementation
   use GenServer
 
-  def start_link(state) do
+  def start_child_server(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
@@ -66,15 +66,23 @@ defmodule MyGenServerRunner do
 
   # Supervisor
   # --------------
+  # Create GenServer using Supervisor like Akka Guard/Supervisor, exactly same logic behind this error Handler implementation.
+  IO.inspect "------------------------------------------------------------------------"
+  IO.inspect "Supervisor:"
 
+  # We define our GenServer as a child configuring the function to start up the server.
   children = [
     %{
       id: MyGenServer,
-      start: {MyGenServer, :start_link, [[]]}
+      start: {MyGenServer, :start_child_server, [[]]}
     }
   ]
 
-  {:ok,_} = Supervisor.start_link(children,  strategy: :one_for_one)
+  # We start a supervisor using [start_link] function, passing the array of children to supervise.
+  # We also pick up which strategy apply on them. in this case [one_for_one] if a child process terminates, only that process is restarted
+  {:ok,pid} = Supervisor.start_link(children,  strategy: :one_for_one)
+  # Using [count_children] function passing the Supervisor processId we get info about all children of this supervisor
+  IO.inspect Supervisor.count_children(pid), label: "Supervisor children information"
 
   GenServer.cast(MyGenServer, {:add_product, %Product{id: "1", description: "nachos", price: 3.0}})
   IO.inspect GenServer.call(MyGenServer, :basket), label: "Basket"
