@@ -40,56 +40,31 @@ defmodule HttpServer do
   # to check side-effect.
   def listen_connection(socket) do
     {:ok, request} = :gen_tcp.accept(socket)
-
-    process_request(request, "Hello world! The time is #{Time.to_string(Time.utc_now())}")
-    #    spawn(
-    #      fn ->
-    #        body = "Hello world! The time is #{Time.to_string(Time.utc_now())}"
-    #
-    #        response = """
-    #        HTTP/1.1 200\r
-    #        Content-Type: text/html\r
-    #        Content-Length: #{byte_size(body)}\r
-    #        \r
-    #        #{body}
-    #        """
-    #        send_response(request, response)
-    #      end
-    #    )
-
+    process_request(request, "Hello Http Server #{Time.to_string(Time.utc_now())}")
     # Recursive call to get the next request.
     listen_connection(socket)
   end
 
-  # We process the request, and the logic in another thread.
+  # We process the request, and run the logic in another thread using [spawn].
+  # Using [:gen_tcp.send] passing socket and response we can response the request.
+  # Once we response we can close the connection just using [:gen_tcp.close] passing again the socket.
   def process_request(request, body) do
     spawn(
       fn ->
-        response = """
-        HTTP/1.1 200\r
-        Content-Type: text/html\r
-        Content-Length: #{byte_size(body)}\r
-        \r
-        #{body}
-        """
-        send_response(request, response)
+        :gen_tcp.send(request, create_response(body))
+        :gen_tcp.close(request)
       end
     )
   end
 
-  # Using [:gen_tcp.send] passing socket and response we can response the request.
-  # Once we response we can close the connection just using [:gen_tcp.close] passing again the socket.
-  def send_response(socket, response) do
-    :gen_tcp.send(socket, response)
-    :gen_tcp.close(socket)
+  def create_response(body)  do
+    """
+    HTTP/1.1 200\r
+    Content-Type: text/html\r
+    Content-Length: #{byte_size(body)}\r
+    \r
+    #{body}
+    """
   end
-
-  # Child function to be used for a Supervisor where we specify how we start the server.
-  # In case the server fails for whatever reason it will be by default restart.
-  def child_spec(opts) do
-    %{id: HttpServer, start: {HttpServer, :start_server, [[opts]]}}
-  end
-
-
 
 end
