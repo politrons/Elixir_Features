@@ -1,4 +1,4 @@
-# HttpServer # ![My image](../img/server-icon.png)
+# HttpServer ![My image](../img/server-icon.png)
 
 You can find the code of the server **[here](lib/http_server.ex)**
 
