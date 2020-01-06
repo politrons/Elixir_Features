@@ -27,13 +27,18 @@ defmodule HttpServer do
   def start_server(port) do
     IO.inspect "Starting http server on port #{port}"
 
-    # Using [:gen_tcp.listen] passing the port we receive a tuple of state of action(:ok,:error) and the socket
-    {:ok, socket} = :gen_tcp.listen(port, active: false, packet: :http_bin, reuseaddr: true)
-
-    # Spawn_link run a function Module in another thread, and wait until the function return.
-    # We specify the module, function name and argument to the function.
-    # Run in another HttpServer the function that accept connections.
-    {:ok, spawn_link(HttpServer, :listen_connection, [socket])}
+    # Using [:gen_tcp.listen] passing the port we receive a tuple of state of action(:ok,:error) and the socket or reason of error
+    http_opts = [active: false, packet: :http_bin, reuseaddr: true]
+    # We do a pattern matching to control side-effect of creation of server.
+    case :gen_tcp.listen(port, http_opts) do
+      {:ok, socket} ->
+        # Spawn_link run a function Module in another thread, and wait until the function return.
+        # We specify the module, function name and argument to the function.
+        # Run in another HttpServer the function that accept connections.
+        {:ok, spawn_link(HttpServer, :listen_connection, [socket])}
+      {:error, reason} ->
+        IO.inspect "Error running the server caused by: #{inspect reason}"
+    end
   end
 
   # [:gen_tcp.accept] passing a socket block the execution until we receive a request, and :ok or :error
