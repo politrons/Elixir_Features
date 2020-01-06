@@ -45,7 +45,7 @@ defmodule HttpServer do
   # to check side-effect.
   def listen_connection(listener) do
     {:ok, socket} = :gen_tcp.accept(listener)
-    process_request(socket, "Hello Http Server #{UUID.uuid1()} #{Time.to_string(Time.utc_now())}")
+    process_request(socket)
     # Recursive call to get the next request.
     listen_connection(listener)
   end
@@ -53,13 +53,29 @@ defmodule HttpServer do
   # We process the request, and run the logic in another thread using [spawn].
   # Using [:gen_tcp.send] passing socket and response we can response the request.
   # Once we response we can close the connection just using [:gen_tcp.close] passing again the socket.
-  def process_request(socket, body) do
+  def process_request(socket) do
     spawn(
       fn ->
-        :gen_tcp.send(socket, create_response(body))
+        {:ok, {_server_name, verb, {_, path}, _version}} = :gen_tcp.recv(socket, 0)
+        :gen_tcp.send(socket, call(%{verb: verb, path: path}))
         :gen_tcp.close(socket)
       end
     )
+  end
+
+  # Handle Paths
+  # -------------
+  # Pattern matching for paths.
+  def call(%{verb: :GET, path: "/login"}) do
+    create_response("You can login into the system #{UUID.uuid1()} #{Time.to_string(Time.utc_now())}")
+  end
+
+  def call(%{verb: :GET, path: "/users"}) do
+    create_response("We will give you users feature pretty soon")
+  end
+  # everything else is a 404 response
+  def call(_) do
+    create_not_found_response()
   end
 
   def create_response(body)  do
@@ -69,6 +85,13 @@ defmodule HttpServer do
     Content-Length: #{byte_size(body)}\r
     \r
     #{body}
+    """
+  end
+
+  def create_not_found_response()  do
+    """
+    HTTP/1.1 404\r
+    Content-Type: text/html\r
     """
   end
 
