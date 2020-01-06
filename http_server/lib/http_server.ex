@@ -4,54 +4,77 @@ defmodule HttpServer do
 
   use Application
 
+  # Function to be invoked by mix.exs to run the application.
+  # Here we define the execution of the server as children of a supervisor.
+  # To get more info about supervisor visit [my_gen_server]
   def start(_type, _args) do
-    IO.inspect "starting application"
+    IO.inspect "Starting application"
     children = [
       %{
         id: HttpServer,
-        start: {HttpServer, :start_server, []}
+        start: {HttpServer, :start_server, [1981]}
       }
     ]
 
-    opts = [strategy: :one_for_one, name: Supervisor]
-    Supervisor.start_link(children, opts)
+    supervisor_options = [strategy: :one_for_one, name: Supervisor]
+    # Run the supervisor passing the array of children and the supervisor configuration,
+    # and then this one run the children process.
+    Supervisor.start_link(children, supervisor_options)
   end
 
+  # Function to start the http server.
+  # We use [:gen_tcp] API to use all features to build the server and service layer.
+  def start_server(port) do
+    IO.inspect "Starting http server on port #{port}"
 
-  require Logger
-
-  def start_server do
-    IO.inspect "starting socket connection"
-
-    {:ok, socket} = :gen_tcp.listen(1981, active: false, packet: :http_bin, reuseaddr: true)
+    # Using [:gen_tcp.listen] passing the port we receive a tuple of state of action(:ok,:error) and the socket
+    {:ok, socket} = :gen_tcp.listen(port, active: false, packet: :http_bin, reuseaddr: true)
 
     # Spawn_link run a function Module in another thread, and wait until the function return.
     # We specify the module, function name and argument to the function.
     # Run in another HttpServer the function that accept connections.
-    {:ok, spawn_link(HttpServer, :accept_connection, [socket])}
+    {:ok, spawn_link(HttpServer, :listen_connection, [socket])}
   end
 
   # [:gen_tcp.accept] passing a socket block the execution until we receive a request, and :ok or :error
   # to check side-effect.
-  def accept_connection(socket) do
+  def listen_connection(socket) do
     {:ok, request} = :gen_tcp.accept(socket)
 
-    # We process the request, and the logic in another thread.
-    spawn(fn ->
-      body = "Hello world! The time is #{Time.to_string(Time.utc_now())}"
-
-      response = """
-      HTTP/1.1 200\r
-      Content-Type: text/html\r
-      Content-Length: #{byte_size(body)}\r
-      \r
-      #{body}
-      """
-      send_response(request, response)
-    end)
+    process_request(request, "Hello world! The time is #{Time.to_string(Time.utc_now())}")
+    #    spawn(
+    #      fn ->
+    #        body = "Hello world! The time is #{Time.to_string(Time.utc_now())}"
+    #
+    #        response = """
+    #        HTTP/1.1 200\r
+    #        Content-Type: text/html\r
+    #        Content-Length: #{byte_size(body)}\r
+    #        \r
+    #        #{body}
+    #        """
+    #        send_response(request, response)
+    #      end
+    #    )
 
     # Recursive call to get the next request.
-    accept_connection(socket)
+    listen_connection(socket)
+  end
+
+  # We process the request, and the logic in another thread.
+  def process_request(request, body) do
+    spawn(
+      fn ->
+        response = """
+        HTTP/1.1 200\r
+        Content-Type: text/html\r
+        Content-Length: #{byte_size(body)}\r
+        \r
+        #{body}
+        """
+        send_response(request, response)
+      end
+    )
   end
 
   # Using [:gen_tcp.send] passing socket and response we can response the request.
