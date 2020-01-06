@@ -12,6 +12,10 @@ Author  Pablo Perez Garcia
 * **[Processes](features/lib/actors.ex)**
 * **[GenServer](features/lib/my_gen_server.ex)**
 
+### Server
+
+* **[Http-Server](http_server/README.md)**
+
 ### How to use it
 
 Need to install [Elixir](https://elixir-lang.org) and [Erlang](https://www.erlang.org).
