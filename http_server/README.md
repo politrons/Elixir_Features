@@ -1,4 +1,7 @@
-# HttpServer
+# HttpServer # ![My image](../img/server-icon.png)
+
+
+**[Http_Server](lib/http_server.ex)**
 
 In order to create a mix project just use
 
@@ -40,3 +43,4 @@ To run the server just need to execute the next command in the same folder where
 ```
 mix run --no-halt
 ```
+
