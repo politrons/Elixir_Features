@@ -22,6 +22,9 @@ defmodule HttpServer do
     Supervisor.start_link(children, supervisor_options)
   end
 
+  # Server
+  # --------
+
   # Function to start the http server.
   # We use [:gen_tcp] API to use all features to build the server and service layer.
   def start_server(port) do
@@ -50,35 +53,55 @@ defmodule HttpServer do
     listen_connection(listener)
   end
 
+  # Service
+  # ---------
+
   # We process the request, and run the logic in another thread using [spawn].
-  # Using [:gen_tcp.send] passing socket and response we can response the request.
-  # Once we response we can close the connection just using [:gen_tcp.close] passing again the socket.
+  # Inside the green thread we do pipeline composition to invoke the rest of functions.
   def process_request(socket) do
     spawn(
       fn ->
-        {:ok, {_server_name, verb, {_, path}, _version}} = :gen_tcp.recv(socket, 0)
-        :gen_tcp.send(socket, call(%{verb: verb, path: path}))
-        :gen_tcp.close(socket)
+        socket
+        |> read_request
+        |> response_request
+        |> close_socket
       end
     )
   end
 
-  # Handle Paths
-  # -------------
-  # Pattern matching for paths.
-  def call(%{verb: :GET, path: "/login"}) do
+  def read_request(socket) do
+    {:ok, {_server_name, verb, {_, path}, _version}} = :gen_tcp.recv(socket, 0)
+    %{socket: socket, verb: verb, path: path}
+  end
+
+  # Using [:gen_tcp.send] passing socket and response we can response the request.
+  def response_request(%{socket: socket, verb: verb, path: path}) do
+    :gen_tcp.send(socket, handle(%{verb: verb, path: path}))
+  end
+
+  # Once we response we can close the connection just using [:gen_tcp.close] passing again the socket.
+  def close_socket(socket) do
+    :gen_tcp.close(socket)
+  end
+
+  # Handles
+  # --------
+  # Pattern matching to handle paths, we create a handle function for each [Method]+[Path] and we implement
+  # the business logic for each. It return a String response
+
+  def handle(%{verb: :GET, path: "/login"}) do
     create_response("You can login into the system #{UUID.uuid1()} #{Time.to_string(Time.utc_now())}")
   end
 
-  def call(%{verb: :GET, path: "/users"}) do
+  def handle(%{verb: :GET, path: "/users"}) do
     create_response("We will give you users feature pretty soon")
   end
   # everything else is a 404 response
-  def call(_) do
+  def handle(_) do
     create_not_found_response()
   end
 
-  def create_response(body)  do
+  defp create_response(body)  do
     """
     HTTP/1.1 200\r
     Content-Type: text/html\r
