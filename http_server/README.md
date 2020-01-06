@@ -1,15 +1,14 @@
 # HttpServer # ![My image](../img/server-icon.png)
 
+You can find the code of the server **[here](lib/http_server.ex)**
 
-**[Http_Server](lib/http_server.ex)**
+## Installation
 
 In order to create a mix project just use
 
 ```
 mix new http_server
 ```
-
-## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `http_server` to your list of dependencies in `mix.exs`:
